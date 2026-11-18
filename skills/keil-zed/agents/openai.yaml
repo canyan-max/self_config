@@ -1,0 +1,4 @@
+interface:
+  display_name: "Keil + Zed"
+  short_description: "配置 Keil 工程的 Zed 补全、Target 切换及 PowerShell 编译烧录任务"
+  default_prompt: "使用 $keil-zed 为这个 Keil 工程配置 Zed 和 clangd，并验证当前 Target 的头文件路径与编译任务。"
