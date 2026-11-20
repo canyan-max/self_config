@@ -1,0 +1,13 @@
+device HC32L130
+; READ_START 0x00000000
+; READ_BYTES 0x00010000
+si SWD
+speed 4000
+connect
+r
+h
+erase
+@HEX_FILE@
+r
+g
+exit
