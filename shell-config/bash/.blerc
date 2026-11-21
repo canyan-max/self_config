@@ -1,4 +1,9 @@
 # Inline history suggestions, with Tab to accept and normal completion otherwise.
+# Keep typing lightweight: no live command/path/variable highlighting.
+bleopt highlight_syntax=
+bleopt highlight_filename=
+bleopt highlight_variable=
+bleopt complete_auto_menu=
 bleopt complete_auto_complete=1
 bleopt complete_auto_delay=300
 bleopt complete_auto_complete_opts+=syntax-disabled
@@ -8,15 +13,3 @@ blehook/eval-after-load complete '
     ble-bind -m auto_complete -f C-i auto_complete/insert
     ble-bind -m auto_complete -f TAB auto_complete/insert
 '
-
-# ELYTerminal installs its prompt callback after .bashrc has attached ble.sh.
-# Keep its directory/title reporting active on subsequent ble.sh prompts.
-function self_config/elyterminal/precmd {
-    local last_status=$?
-    if declare -F _ely_prompt >/dev/null; then
-        ble/util/setexit "$last_status"
-        _ely_prompt
-    fi
-    return "$last_status"
-}
-blehook PRECMD!=self_config/elyterminal/precmd

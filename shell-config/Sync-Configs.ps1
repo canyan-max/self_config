@@ -26,6 +26,7 @@ $mapping = [ordered]@{
     'bash\.blerc' = Join-Path $TargetHome '.blerc'
     'bash\.bashrc.d\bat.sh' = Join-Path $TargetHome '.bashrc.d\bat.sh'
     'bash\.bashrc.d\conv.sh' = Join-Path $TargetHome '.bashrc.d\conv.sh'
+    'bash\.bashrc.d\ely-title.sh' = Join-Path $TargetHome '.bashrc.d\ely-title.sh'
     'powershell\Microsoft.PowerShell_profile.ps1' = Join-Path $documents 'PowerShell\Microsoft.PowerShell_profile.ps1'
     'starship\starship.toml' = $starshipConfig
 }

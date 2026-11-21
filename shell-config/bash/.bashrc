@@ -1,7 +1,7 @@
 # ble.sh: load before other interactive shell customizations.
 if [[ $- == *i* && -f /d/software_config/blesh/ble.sh ]]; then
     export USER="${USER:-$(id -un)}"
-    source /d/software_config/blesh/ble.sh --attach=none
+    source /d/software_config/blesh/ble.sh --attach=prompt
 fi
 
 if [ -f /etc/bash.bashrc ]; then
@@ -42,4 +42,4 @@ bind 'set bell-style none'
 # star ship
 eval "$(starship init bash)"
 
-[[ ! ${BLE_VERSION-} ]] || ble-attach
+# ble.sh attaches at the first prompt, after terminal integration is installed.
