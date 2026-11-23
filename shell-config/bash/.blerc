@@ -1,6 +1,6 @@
 # Inline history suggestions, with Tab to accept and normal completion otherwise.
-# Keep typing lightweight: no live command/path/variable highlighting.
-bleopt highlight_syntax=
+# Highlight commands softly; keep path/variable highlighting disabled.
+bleopt highlight_syntax=1
 bleopt highlight_filename=
 bleopt highlight_variable=
 bleopt complete_auto_menu=
@@ -8,6 +8,23 @@ bleopt complete_auto_complete=1
 bleopt complete_auto_delay=300
 bleopt complete_auto_complete_opts+=syntax-disabled
 ble-face -s auto_complete fg=242
+
+# Use one soft green for commands, including aliases such as ls.
+ble-face -s syntax_command fg=114
+ble-face -s command_builtin_dot fg=114
+ble-face -s command_builtin fg=114
+ble-face -s command_alias fg=114
+ble-face -s command_function fg=114
+ble-face -s command_file fg=114
+ble-face -s command_keyword fg=114
+ble-face -s command_jobs fg=114
+ble-face -s command_directory fg=114
+
+# Keep ordinary options and incomplete/unknown input neutral.
+ble-face -s argument_option none
+ble-face -s argument_error none
+ble-face -s syntax_error none
+ble-face -s command_suffix_new none
 
 blehook/eval-after-load complete '
     ble-bind -m auto_complete -f C-i auto_complete/insert
