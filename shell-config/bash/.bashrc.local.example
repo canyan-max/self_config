@@ -1,0 +1,8 @@
+# Optional: copy to ~/.bashrc.local and adjust paths for this computer.
+# This file is NOT applied or captured by Sync-Configs.ps1.
+# Use Git Bash paths (/d/...); omit settings for tools on the standard paths.
+
+# SELF_CONFIG_BLESH_PATH='/d/software_config/blesh/ble.sh'
+# SELF_CONFIG_BAT_DIR='/d/software_config/bat'
+# SELF_CONFIG_PROJECTS_HOME='/d/program_CC'
+# SELF_CONFIG_ST_PROJECT='/d/program_CC/00_my_information/02_st/clang_st32_h743vi'

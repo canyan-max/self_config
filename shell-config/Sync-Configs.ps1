@@ -26,10 +26,12 @@ $mapping = [ordered]@{
     'bash\.blerc' = Join-Path $TargetHome '.blerc'
     'bash\.bashrc.d\bat.sh' = Join-Path $TargetHome '.bashrc.d\bat.sh'
     'bash\.bashrc.d\conv.sh' = Join-Path $TargetHome '.bashrc.d\conv.sh'
-    'bash\.bashrc.d\ely-title.sh' = Join-Path $TargetHome '.bashrc.d\ely-title.sh'
     'powershell\Microsoft.PowerShell_profile.ps1' = Join-Path $documents 'PowerShell\Microsoft.PowerShell_profile.ps1'
     'starship\starship.toml' = $starshipConfig
 }
+
+# Remove the retired title override on Apply, including on other computers.
+$retiredTitle = Join-Path $TargetHome '.bashrc.d\ely-title.sh'
 
 if ($Mode -eq 'Preview') {
     foreach ($entry in $mapping.GetEnumerator()) {
@@ -69,10 +71,19 @@ foreach ($operation in $operations) {
         Copy-Item -LiteralPath $operation.Destination -Destination $backupFile
     }
 }
+if ($Mode -eq 'Apply' -and (Test-Path -LiteralPath $retiredTitle -PathType Leaf)) {
+    $backupFile = Join-Path $backupDirectory 'bash\.bashrc.d\ely-title.sh'
+    New-Item -ItemType Directory -Path (Split-Path -Parent $backupFile) -Force | Out-Null
+    Copy-Item -LiteralPath $retiredTitle -Destination $backupFile
+}
 foreach ($operation in $operations) {
     New-Item -ItemType Directory -Path (Split-Path -Parent $operation.Destination) -Force | Out-Null
     Copy-Item -LiteralPath $operation.Source -Destination $operation.Destination -Force
     Write-Host "$Mode`: $($operation.Destination)"
+}
+if ($Mode -eq 'Apply' -and (Test-Path -LiteralPath $retiredTitle -PathType Leaf)) {
+    Remove-Item -LiteralPath $retiredTitle
+    Write-Host "Removed retired config: $retiredTitle"
 }
 if (Test-Path -LiteralPath $backupDirectory) {
     Write-Host "Backup: $backupDirectory"

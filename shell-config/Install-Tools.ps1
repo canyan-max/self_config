@@ -1,8 +1,14 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param()
+param(
+    [string]$TempRoot = 'D:\codex-temp\self-config-install'
+)
 
 $ErrorActionPreference = 'Stop'
+
+New-Item -ItemType Directory -Path $TempRoot -Force | Out-Null
+$env:TEMP = [System.IO.Path]::GetFullPath($TempRoot)
+$env:TMP = $env:TEMP
 
 if (-not (Get-Command winget.exe -ErrorAction SilentlyContinue)) {
     throw 'winget was not found. Install App Installer, then run this script again.'
@@ -39,11 +45,13 @@ Invoke-WebRequest -Uri 'https://github.com/akinomyoga/ble.sh/releases/download/n
 $installScript = @'
 set -e
 archive=$1
+export TMPDIR=$(cygpath -u "$2")
 work=$(mktemp -d)
+trap 'rm -rf -- "$work"' EXIT
 tar -xJf "$archive" -C "$work"
 bash "$work/ble-nightly/ble.sh" --install "$HOME/.local/share"
 '@
-& $bash --noprofile --norc -c $installScript self-config $archive
+& $bash --noprofile --norc -c $installScript self-config $archive $env:TEMP
 if ($LASTEXITCODE -ne 0) {
     throw "ble.sh installation failed (exit code $LASTEXITCODE)."
 }

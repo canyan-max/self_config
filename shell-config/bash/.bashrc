@@ -1,7 +1,15 @@
-# ble.sh: load before other interactive shell customizations.
-if [[ $- == *i* && -f /d/software_config/blesh/ble.sh ]]; then
-    export USER="${USER:-$(id -un)}"
-    source /d/software_config/blesh/ble.sh --attach=prompt
+# Machine-specific paths and aliases stay outside the shared configuration.
+[[ ! -f "$HOME/.bashrc.local" ]] || source "$HOME/.bashrc.local"
+
+# Load ble.sh once, before other interactive shell customizations.
+if [[ $- == *i* && ! ${BLE_VERSION-} ]]; then
+    for self_config_ble in "${SELF_CONFIG_BLESH_PATH-}" "$HOME/.local/share/blesh/ble.sh"; do
+        [[ -n $self_config_ble && -f $self_config_ble ]] || continue
+        export USER="${USER:-$(id -un)}"
+        source "$self_config_ble" --attach=prompt
+        break
+    done
+    unset self_config_ble
 fi
 
 if [ -f /etc/bash.bashrc ]; then
@@ -26,8 +34,8 @@ alias ip='ipconfig'
 alias his='history'
 alias ll='ls -la'
 alias la='ls -A'
-alias cmphome='cd /d/program_CC'
-alias st='cd /d/program_CC/00_my_information/02_st/clang_st32_h743vi'
+alias cmphome='cd -- "${SELF_CONFIG_PROJECTS_HOME:-$HOME}"'
+alias st='cd -- "${SELF_CONFIG_ST_PROJECT:-$HOME}"'
 alias exp='explorer'
 alias ls='ls -F --color=auto --show-control-chars'
 # function
@@ -40,6 +48,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 bind 'set bell-style none'
 # star ship
-eval "$(starship init bash)"
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init bash)"
+fi
 
 # ble.sh attaches at the first prompt, after terminal integration is installed.

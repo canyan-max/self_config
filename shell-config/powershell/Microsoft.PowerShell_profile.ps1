@@ -1,4 +1,6 @@
-Invoke-Expression (&starship init powershell)
+if (Get-Command starship -ErrorAction SilentlyContinue) {
+    Invoke-Expression (&starship init powershell)
+}
 
 # PSReadLine: Tab accepts inline predictions, falling back to menu completion.
 Import-Module PSReadLine
